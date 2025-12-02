@@ -1,43 +1,48 @@
-﻿int keyShift = 1;
-System.Console.WriteLine("automated testing ...");
-System.Diagnostics.Debug.Assert(ShiftedCharacter('a') == 'b');
-System.Console.WriteLine("tests passed.");
+﻿RunTests();
+RunMain();
 
-char ShiftedCharacter(char originalCharacter)
+static char ShiftedCharacter(char originalCharacter, int keyShift = 1)
 {
     if (originalCharacter + keyShift > 'z')
     {
-        return (char)(originalCharacter + (keyShift - 26));
+        return AsChar(originalCharacter + (keyShift - 26));
     }
     else if (originalCharacter + keyShift < 'a')
     {
-        return (char)(originalCharacter + (keyShift + 26));
+        return AsChar(originalCharacter + (keyShift + 26));
     }
-    else return (char)(originalCharacter + keyShift);
+    else return AsChar(originalCharacter + keyShift);
 }
-System.Diagnostics.Debug.Assert(ShiftedCharacter('a') == 'b');
-System.Console.WriteLine();
-System.Diagnostics.Debug.Assert(AsChar('a' + 0) == 'a');
-System.Diagnostics.Debug.Assert(AsChar('a' + 1) == 'b');
-System.Diagnostics.Debug.Assert(AsChar('a' + 3) == 'd');
 
-char AsChar(int asciiValue)
+static char AsChar(int asciiValue)
 {
     return (char)asciiValue;
 }
 
-while (true)
+static void RunMain()
 {
-    ConsoleKeyInfo Input = Console.ReadKey(true);
-    ConsoleKey InputKey = Input.Key;
-    char originalCharacter = Input.KeyChar;
-    if (originalCharacter == '`') break;
-    if (InputKey == ConsoleKey.UpArrow) keyShift++;
-    if (InputKey == ConsoleKey.DownArrow) keyShift--;
-    if (originalCharacter == ' ') Console.Write(' ');
-    if (InputKey != ConsoleKey.UpArrow && InputKey!= ConsoleKey.DownArrow && originalCharacter != ' ')
+    int keyShift = 1;
+    while (true)
     {
-        Console.Write(ShiftedCharacter(originalCharacter));
+        ConsoleKeyInfo Input = Console.ReadKey(true);
+        ConsoleKey InputKey = Input.Key;
+        char originalCharacter = Input.KeyChar;
+        if (InputKey == ConsoleKey.Escape) break;
+        else if (InputKey == ConsoleKey.UpArrow) keyShift++;
+        else if (InputKey == ConsoleKey.DownArrow) keyShift--;
+        else if (InputKey == ConsoleKey.Spacebar) Console.Write(' ');
+        else Console.Write(ShiftedCharacter(originalCharacter, keyShift));
     }
+}
 
+static void RunTests()
+{
+    System.Console.WriteLine("automated testing ...");
+    System.Diagnostics.Debug.Assert(ShiftedCharacter('a') == 'b');
+    System.Diagnostics.Debug.Assert(ShiftedCharacter('a') == 'b');
+    System.Diagnostics.Debug.Assert(AsChar('a' + 0) == 'a');
+    System.Diagnostics.Debug.Assert(AsChar('a' + 1) == 'b');
+    System.Diagnostics.Debug.Assert(AsChar('a' + 3) == 'd');
+    System.Console.WriteLine("tests passed.");
+    System.Console.WriteLine();
 }
