@@ -1,11 +1,19 @@
-﻿
+﻿int keyShift = 1;
 System.Console.WriteLine("automated testing ...");
 System.Diagnostics.Debug.Assert(ShiftedCharacter('a') == 'b');
 System.Console.WriteLine("tests passed.");
 
 char ShiftedCharacter(char originalCharacter)
 {
-    return (char)(originalCharacter + 1 > 'z' ? originalCharacter - 25 : originalCharacter + 1);
+    if (originalCharacter + keyShift > 'z')
+    {
+        return (char)(originalCharacter + (keyShift - 26));
+    }
+    else if (originalCharacter + keyShift < 'a')
+    {
+        return (char)(originalCharacter + (keyShift + 26));
+    }
+    else return (char)(originalCharacter + keyShift);
 }
 System.Diagnostics.Debug.Assert(ShiftedCharacter('a') == 'b');
 System.Console.WriteLine();
@@ -20,8 +28,16 @@ char AsChar(int asciiValue)
 
 while (true)
 {
-    char originalCharacter = Console.ReadKey(true).KeyChar;
+    ConsoleKeyInfo Input = Console.ReadKey(true);
+    ConsoleKey InputKey = Input.Key;
+    char originalCharacter = Input.KeyChar;
     if (originalCharacter == '`') break;
-    Console.Write(ShiftedCharacter((char)originalCharacter));
+    if (InputKey == ConsoleKey.UpArrow) keyShift++;
+    if (InputKey == ConsoleKey.DownArrow) keyShift--;
+    if (originalCharacter == ' ') Console.Write(' ');
+    if (InputKey != ConsoleKey.UpArrow && InputKey!= ConsoleKey.DownArrow && originalCharacter != ' ')
+    {
+        Console.Write(ShiftedCharacter(originalCharacter));
+    }
 
 }
